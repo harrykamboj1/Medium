@@ -1,11 +1,10 @@
 {
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts",
-    "env": "dotenv -e .dev.vars"
-
+    "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
+    "@harnoor_singh/medium-common": "^1.0.1",
     "@prisma/client": "^5.11.0",
     "@prisma/extension-accelerate": "^1.0.0",
     "hono": "^4.1.0",
