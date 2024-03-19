@@ -2,10 +2,6 @@ import { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
-  const [name, setName] = useState("");
-  function setUsername(params: string) {
-    setName(params);
-  }
   return (
     <div className="h-screen flex justify-center flex-col">
       <div className="flex justify-center">
@@ -20,9 +16,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
           <LabelledInput
             label="Name"
             placeholder="John dcx..."
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
+            onChange={(e) => {}}
           />
         </div>
       </div>
