@@ -11,8 +11,13 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     password: "",
   });
 
-  function sendRequest() {
-    axios.post(`${BACKEND_URL}`);
+  async function sendRequest() {
+    try {
+      const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`);
+      console.log(response);
+    } catch (e) {
+      console.log("Error while signup request :: " + e);
+    }
   }
   return (
     <div className="h-screen flex justify-center flex-col">
