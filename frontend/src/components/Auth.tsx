@@ -2,6 +2,7 @@ import { SignupInput } from "@harnoor_singh/medium-common";
 import { ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { BACKEND_URL } from "../config";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
   const [postInputs, setPostInputs] = useState<SignupInput>({
@@ -9,6 +10,10 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     username: "",
     password: "",
   });
+
+  function sendRequest() {
+    axios.post(`${BACKEND_URL}`);
+  }
   return (
     <div className="h-screen flex justify-center flex-col">
       <div className="flex justify-center">
