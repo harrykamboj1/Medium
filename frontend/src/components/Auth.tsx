@@ -1,10 +1,11 @@
 import { SignupInput } from "@harnoor_singh/medium-common";
 import { ChangeEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
+  const navigate = useNavigate();
   const [postInputs, setPostInputs] = useState<SignupInput>({
     name: "",
     username: "",
@@ -13,10 +14,17 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
 
   async function sendRequest() {
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`);
+      const response = await axios.post(
+        `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
+        postInputs
+      );
       console.log(response);
+      const jwt = response.data;
+      localStorage.setItem("token", jwt);
+      navigate("/blogs");
     } catch (e) {
       console.log("Error while signup request :: " + e);
+      alert("Something went wrong....");
     }
   }
   return (
@@ -60,7 +68,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
               onChange={(e) => {
                 setPostInputs({
                   ...postInputs,
-                  name: e.target.value,
+                  username: e.target.value,
                 });
               }}
             />
@@ -71,11 +79,12 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
               onChange={(e) => {
                 setPostInputs({
                   ...postInputs,
-                  name: e.target.value,
+                  password: e.target.value,
                 });
               }}
             />
             <button
+              onClick={sendRequest}
               type="button"
               className="mt-7 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
             >
