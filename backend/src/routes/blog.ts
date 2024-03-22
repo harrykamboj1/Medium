@@ -127,22 +127,23 @@ blogRouter.get("/", async (c) => {
 
 // TODO:: Add Pagination
 blogRouter.get("/bulk", async (c) => {
-  const body = await c.req.json();
-  try {
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env?.DATABASE_URL,
-    }).$extends(withAccelerate());
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+  const blogs = await prisma.post.findMany({
+    select: {
+      content: true,
+      title: true,
+      id: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
 
-    const blogs = await prisma.post.findMany();
-
-    return c.json({
-      blogs,
-    });
-  } catch (e) {
-    c.status(411);
-    return c.json({
-      message: "Something went wrong while fetching the blogs",
-    });
-    console.log(e);
-  }
+  return c.json({
+    blogs,
+  });
 });
