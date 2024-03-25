@@ -196,3 +196,36 @@ blogRouter.delete("/delete/:id", async (c) => {
     });
   }
 });
+
+blogRouter.get("/getByAuthorId/myblogs", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  console.log(c.get("userId"));
+  const blogs = await prisma.post.findMany({
+    where: {
+      authorId: c.get("userId"),
+      author: {
+        name: {
+          not: null,
+        },
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      createdOn: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  return c.json({
+    blogs,
+  });
+});

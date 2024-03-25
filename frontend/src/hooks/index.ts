@@ -74,3 +74,35 @@ export const useBlogs = () => {
     blogs,
   };
 };
+
+export const useMyBlogs = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+
+  useEffect(() => {
+    axios
+      .get(`${BACKEND_URL}/api/v1/blog/getByAuthorId/myblogs`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        setTimeout(() => {
+          setBlogs(res.data.blogs);
+          setLoading(false);
+        }, 2000);
+      })
+      .catch((res) => {
+        if (res.response.status == 403) {
+          alert("You are logout");
+          navigate("/signin");
+        }
+      });
+  }, []);
+
+  return {
+    loading,
+    blogs,
+  };
+};
