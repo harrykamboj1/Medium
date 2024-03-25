@@ -34,7 +34,7 @@ export const Publish = () => {
                 {
                   title,
                   content: description,
-                  createdOn: new Date().toLocaleDateString(),
+                  createdOn: new Date().toDateString(),
                 },
                 {
                   headers: {

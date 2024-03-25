@@ -109,6 +109,9 @@ blogRouter.get("/bulk", async (c) => {
 
   const blogs = await prisma.post.findMany({
     where: {
+      NOT: {
+        authorId: c.get("userId"),
+      },
       author: {
         name: {
           not: null,

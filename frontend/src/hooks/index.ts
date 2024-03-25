@@ -67,7 +67,7 @@ export const useBlogs = () => {
           navigate("/signin");
         }
       });
-  });
+  }, []);
 
   return {
     loading,
