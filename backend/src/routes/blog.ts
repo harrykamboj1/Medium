@@ -58,6 +58,7 @@ blogRouter.post("/", async (c) => {
         title: body.title,
         content: body.content,
         authorId: authorId,
+        createdOn: body.createdOn,
       },
     });
 
@@ -107,10 +108,18 @@ blogRouter.get("/bulk", async (c) => {
   }).$extends(withAccelerate());
 
   const blogs = await prisma.post.findMany({
+    where: {
+      author: {
+        name: {
+          not: null,
+        },
+      },
+    },
     select: {
       id: true,
       title: true,
       content: true,
+      createdOn: true,
       author: {
         select: {
           name: true,
@@ -139,6 +148,7 @@ blogRouter.get("/:id", async (c) => {
         id: true,
         title: true,
         content: true,
+        createdOn: true,
         author: {
           select: {
             name: true,
@@ -154,6 +164,32 @@ blogRouter.get("/:id", async (c) => {
     c.status(411); // 4
     return c.json({
       message: "Error while fetching blog post",
+    });
+  }
+});
+
+blogRouter.delete("/delete/:id", async (c) => {
+  const id = c.req.param("id");
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  try {
+    const deleteBlog = await prisma.post.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    console.log(deleteBlog);
+    c.status(200);
+    return c.json({
+      message: "Blog deleted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return c.json({
+      message: "Error while deleting blog post",
     });
   }
 });

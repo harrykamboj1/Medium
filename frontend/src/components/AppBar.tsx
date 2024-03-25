@@ -1,7 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar } from "./BlogCard";
 
 export const AppBar = () => {
+  const navigate = useNavigate();
+  const logout = () => {
+    localStorage.setItem("token", "");
+    navigate("/signin");
+  };
   return (
     <div className="border-b flex justify-between px-10 py-4">
       <Link
@@ -20,7 +25,15 @@ export const AppBar = () => {
           </button>
         </Link>
 
-        <Avatar size={"big"} name="harkirat" />
+        <button
+          onClick={logout}
+          type="button"
+          className="mr-4 text-white bg-black hover:bg-black focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 "
+        >
+          Logout
+        </button>
+
+        <Avatar size={"big"} name="harnoor" />
       </div>
     </div>
   );
